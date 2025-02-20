@@ -20,7 +20,23 @@ export async function updateUser(data){
           },
          })
     // if industry doesn't exits create it with deafult values - will replace it with ai later
+    if(!industryInsight){
+      industryInsight=await tx.industryInsight.create({
+        data: {
+          industry: data.industry,
+          salaryRanges: [],
+          growthRate: 0,
+          demandLevel: "Medium",
+          topSkills:[],
+          marketOutlook: "Neutral",
+          keyTrends:[],
+          recommendedSkills:[],
+          nextUpdate:new Date(Date.now()+7*24*60*60*1000),
+        },
+      });
+    }
     //update the user
+
       },
       {
         timeout: 10000,
