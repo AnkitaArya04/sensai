@@ -9,4 +9,21 @@ export async function updateUser(data){
     where: { clerkUserId: userId },
   });
   if (!user) throw new Error("User not found");
+
+  try {
+    const result = await db.$transaction(
+      async ()=> {
+         //find if the industry exists
+    // if industry doesn't exits create it with deafult values - will replace it with ai later
+    //update the user
+      },
+      {
+        timeout: 10000,
+      }
+    );
+   return result.user;
+  } catch (error) {
+    console.error("Error updating user and industry:", error.message);
+    throw new Error("Failed to update profile");
+  }
 }
