@@ -12,8 +12,13 @@ export async function updateUser(data){
 
   try {
     const result = await db.$transaction(
-      async ()=> {
+      async (tx)=> {
          //find if the industry exists
+         let industryInsight = await tx.industryInsight.findUnique({
+          where: {
+            industry: data.industry,
+          },
+         })
     // if industry doesn't exits create it with deafult values - will replace it with ai later
     //update the user
       },
