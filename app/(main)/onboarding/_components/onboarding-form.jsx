@@ -51,29 +51,27 @@ const OnboardingForm = ({ industries }) => {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
+    try {
+      const formattedIndustry = `${values.industry}-${values.subIndustry
+        .toLowerCase()
+        .replace(/ /g, "-")}`;
+
+      await updateUserFn({
+        ...values,
+        industry: formattedIndustry,
+      });
+    } catch (error) {
+      console.error("Onboarding error:", error);
+    }
   };
-    // try {
-    //   const formattedIndustry = `${values.industry}-${values.subIndustry
-    //     .toLowerCase()
-    //     .replace(/ /g, "-")}`;
 
-    //   await updateUserFn({
-    //     ...values,
-  //       industry: formattedIndustry,
-  //     });
-  //   } catch (error) {
-  //     console.error("Onboarding error:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (updateResult?.success && !updateLoading) {
-  //     toast.success("Profile completed successfully!");
-  //     router.push("/dashboard");
-  //     router.refresh();
-  //   }
-  // }, [updateResult, updateLoading]);
+  useEffect(() => {
+    if (updateResult?.success && !updateLoading) {
+      toast.success("Profile completed successfully!");
+      router.push("/dashboard");
+      router.refresh();
+    }
+  }, [updateResult, updateLoading]);
 
   const watchIndustry = watch("industry");
 
