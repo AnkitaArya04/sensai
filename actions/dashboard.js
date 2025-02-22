@@ -15,7 +15,7 @@ export const generateAIInsights = async (industry) => {
               { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
             ],
             "growthRate": number,
-            "demandLevel": "High" | "Medium" | "Low",
+            "demandLevel":"HIGH" | "MEDIUM" | "LOW",
             "topSkills": ["skill1", "skill2"],
             "marketOutlook": "Positive" | "Neutral" | "Negative",
             "keyTrends": ["trend1", "trend2"],
@@ -34,6 +34,7 @@ export const generateAIInsights = async (industry) => {
   const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
   return JSON.parse(cleanedText);
+  
 };
 
 export async function getIndustryInsights() {

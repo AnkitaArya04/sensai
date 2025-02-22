@@ -1,12 +1,16 @@
 "use server";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { generateAIInsights } from "./dashboard";
+
 export async function updateUser(data){
   const {userId} = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { clerkUserId: userId
+
+     },
   });
   if (!user) throw new Error("User not found");
 
@@ -21,19 +25,15 @@ export async function updateUser(data){
          })
     // if industry doesn't exits create it with deafult values - will replace it with ai later
     if(!industryInsight){
-      industryInsight=await tx.industryInsight.create({
-        data: {
-          industry: data.industry,
-          salaryRanges: [],
-          growthRate: 0,
-          demandLevel: "MEDIUM",
-          topSkills:[],
-          marketOutlook: "NEUTRAL",
-          keyTrends:[],
-          recommendedSkills:[],
-          nextUpdate:new Date(Date.now()+7*24*60*60*1000),
-        },
-      });
+      const insights = await generateAIInsights(data.industry);
+     
+        industryInsight = await db.industryInsight.create({
+           data: {
+             industry: data.industry,
+             ...insights,
+             nextUpdate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+           },
+         });
     }
     //update the user
     const updatedUser = await tx.user.update({
